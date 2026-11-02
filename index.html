@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Railway Thermal Expansion Simulator</title>
+    <link rel="stylesheet" href="src/style.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Exhibit navigation">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="sidebar-rule"></div>
+        <nav class="sidebar-nav" aria-label="Simulator sections">
+          <a class="nav-item active" href="#controls-heading" aria-label="Simulator controls">⌁</a>
+          <a class="nav-item" href="#results-heading" aria-label="Calculated results">∿</a>
+          <a class="nav-item" href="#scene-heading" aria-label="Railway scene">▣</a>
+        </nav>
+        <div class="sidebar-footer" aria-hidden="true">RTE<br><span>01</span></div>
+      </aside>
+      <main class="dashboard-main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">CLASSROOM EXHIBIT / THERMAL SYSTEMS</p>
+            <h1>Railway Thermal Expansion <span>Simulator</span></h1>
+          </div>
+          <div class="topbar-meta">
+            <span class="live-dot"></span>
+            <span>LOCAL MODEL</span>
+            <span class="meta-divider"></span>
+            <span>v1.0</span>
+          </div>
+        </header>
+
+        <div class="dashboard-grid">
+          <section class="panel controls-panel" aria-labelledby="controls-heading">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">INPUT ARRAY</p>
+                <h2 id="controls-heading">Simulator controls</h2>
+              </div>
+              <span class="panel-index">01</span>
+            </div>
+            <p class="panel-intro">Tune the conditions and observe how the joint responds.</p>
+            <div data-primary-control class="control-row">
+              <label for="temperatureC">Temperature (°C)</label>
+              <input id="temperatureC" class="temperature-slider" type="range" min="10" max="100" step="1" value="25">
+              <output for="temperatureC">25 °C</output>
+            </div>
+            <div data-primary-control class="control-row">
+              <label for="initialGapMm">Initial gap (mm)</label>
+              <input id="initialGapMm" class="gap-slider" type="range" min="0" max="15" step="0.1" value="6">
+              <output for="initialGapMm">6 mm</output>
+            </div>
+            <div data-primary-control class="control-row">
+              <label for="material">Material</label>
+              <select id="material">
+                <option value="steel">Steel</option>
+                <option value="aluminum">Aluminum</option>
+                <option value="copper">Copper</option>
+              </select>
+            </div>
+            <div class="control-footnote"><span class="signal-line"></span><span>Adjust inputs to run a live calculation</span></div>
+          </section>
+
+          <section class="panel results-panel" aria-labelledby="results-heading">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">LIVE READOUT</p>
+                <h2 id="results-heading">Calculated rail state</h2>
+              </div>
+              <span class="panel-index">02</span>
+            </div>
+            <div class="status-card">
+              <span class="status-card-label">JOINT STATUS</span>
+              <strong id="statusBadge">OPEN</strong>
+            </div>
+            <p id="resultsSummary" aria-live="polite"></p>
+            <h3>How the calculation works</h3>
+            <p id="resultsExplanation"></p>
+            <p id="resultsLimitations"></p>
+          </section>
+
+          <section class="panel scene-panel" aria-labelledby="scene-heading">
+            <div class="scene-heading section-heading">
+              <div>
+                <p class="eyebrow">OBSERVATION CHAMBER</p>
+                <h2 id="scene-heading">Railway joint scene</h2>
+              </div>
+              <span class="scene-help">Drag to orbit · Scroll to zoom</span>
+            </div>
+            <p id="materialCue" class="material-cue" aria-live="polite">Material identity: Steel</p>
+            <p id="visualScaleNote" class="visual-note">Rail movement is illustrative and visually exaggerated; it is not drawn to physical scale.</p>
+            <p id="heatFlowNote" class="visual-note">Any heat-flow arrows or particles are illustrative and non-quantitative.</p>
+            <p id="sceneStatus" class="scene-status" role="status" aria-live="polite">3D scene is ready.</p>
+            <div id="sceneMount" aria-label="Three-dimensional railway joint visualization"></div>
+          </section>
+        </div>
+        <footer class="footer-note"><span>ΔL = α × L₀ × (T − T₀)</span><span>Educational model · not for engineering decisions</span></footer>
+      </main>
+    </div>
+    <script src="vendor/three/three.min.js"></script>
+    <script src="src/physics.js"></script>
+    <script src="src/scene.js"></script>
+    <script src="src/main.js"></script>
+  </body>
+</html>

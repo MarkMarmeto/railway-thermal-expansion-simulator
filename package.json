@@ -1,0 +1,17 @@
+{
+  "name": "railway-thermal-expansion-simulator",
+  "private": true,
+  "scripts": {
+    "start": "node tests/e2e/server.js",
+    "test": "node --test tests/*.test.js",
+    "test:e2e": "playwright test tests/e2e/simulator.spec.js",
+    "test:e2e:accessibility": "playwright test tests/e2e/accessibility.spec.js",
+    "test:e2e:failure": "playwright test tests/e2e/startup-failure.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  },
+  "dependencies": {
+    "three": "0.160.0"
+  }
+}
