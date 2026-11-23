@@ -135,24 +135,77 @@ output { margin-top: 0.55rem; color: #26d4d0; font-size: 0.82rem; font-weight: 8
 .visual-note { margin: 0.3rem 0; color: #8fa3c4; font-size: 0.72rem; }
 .scene-status { margin: 0.7rem 0; padding: 0.55rem 0.7rem; border-left: 3px solid #27d7a1; border-radius: 0 6px 6px 0; color: #a9f6d8; background: rgba(39, 215, 161, 0.1); font-size: 0.76rem; font-weight: 650; }
 .scene-status.error { border-left-color: #ff785d; color: #ffc0b2; background: rgba(255, 90, 62, 0.12); }
-#sceneMount { min-height: 32rem; overflow: hidden; border: 1px solid rgba(104, 154, 213, 0.22); border-radius: 14px; background: radial-gradient(circle at 50% 38%, #1a4674, #090f28 65%); }
-#sceneMount canvas { display: block; width: 100%; height: 32rem; }
+#sceneMount { height: clamp(24rem, 43vw, 32rem); min-height: 24rem; overflow: hidden; border: 1px solid rgba(104, 154, 213, 0.22); border-radius: 14px; background: radial-gradient(circle at 50% 38%, #1a4674, #090f28 65%); }
+#sceneMount canvas { display: block; width: 100%; height: 100%; }
 .footer-note { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1rem; color: #687b9d; font-size: 0.7rem; }
 .footer-note span:first-child { color: #25c9c6; font-weight: 700; }
 
-@media (max-width: 1100px) {
-  .dashboard-grid { grid-template-columns: minmax(250px, 0.8fr) minmax(290px, 1fr); }
+@media (max-width: 1250px) {
+  .dashboard-main { padding-inline: 1.5rem; }
+  .dashboard-grid { grid-template-columns: minmax(235px, 0.8fr) minmax(270px, 1fr); }
   .scene-panel { grid-column: 1 / -1; grid-row: auto; }
+  #sceneMount { height: clamp(24rem, 52vw, 32rem); }
+}
+
+@media (max-width: 900px) {
+  .dashboard-main { padding: 1.5rem 1rem 1rem; }
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  .scene-panel { grid-column: 1 / -1; }
+  #sceneMount { height: clamp(23rem, 58vw, 30rem); }
 }
 
 @media (max-width: 720px) {
-  .sidebar { width: 58px; flex-basis: 58px; padding-inline: 0.5rem; }
-  .brand-mark, .nav-item { width: 36px; height: 36px; }
-  .dashboard-main { padding: 1.2rem 0.8rem; }
-  .topbar { align-items: flex-start; flex-direction: column; }
+  body { min-width: 0; }
+  .app-shell { display: block; }
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    width: 100%;
+    height: 58px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.65rem 0.8rem;
+    border-right: 0;
+    border-bottom: 1px solid rgba(135, 164, 214, 0.16);
+    backdrop-filter: blur(16px);
+  }
+  .brand-mark { width: 36px; height: 36px; padding: 7px; border-radius: 10px; }
+  .sidebar-rule, .sidebar-footer { display: none; }
+  .sidebar-nav { display: flex; gap: 0.35rem; }
+  .nav-item { width: 36px; height: 36px; border-radius: 10px; font-size: 1.1rem; }
+  .dashboard-main { width: 100%; padding: 1.25rem 0.75rem 1rem; }
+  .topbar { align-items: flex-start; flex-direction: column; gap: 0.8rem; margin-bottom: 1.1rem; }
   .topbar-meta { align-self: flex-end; }
-  .dashboard-grid { display: block; }
-  .panel { margin-bottom: 0.9rem; }
-  #sceneMount, #sceneMount canvas { min-height: 22rem; height: 22rem; }
-  .footer-note { flex-direction: column; }
+  h1 { max-width: 20rem; font-size: clamp(1.55rem, 8vw, 2rem); }
+  .dashboard-grid { display: flex; flex-direction: column; }
+  .panel { margin-bottom: 0.85rem; padding: 1rem; border-radius: 15px; }
+  .scene-panel { order: -1; }
+  .controls-panel { order: 0; }
+  .results-panel { order: 1; }
+  .panel-intro { margin-bottom: 1rem; }
+  .control-row { margin-top: 1rem; padding-top: 0.85rem; }
+  input[type="range"] { height: 8px; }
+  input[type="range"]::-webkit-slider-thumb { width: 22px; height: 22px; }
+  input[type="range"]::-moz-range-thumb { width: 17px; height: 17px; }
+  .results-panel { min-height: auto; }
+  #resultsSummary { min-height: 0; }
+  .scene-heading { gap: 0.5rem; }
+  .scene-help { max-width: 9rem; text-align: right; }
+  #sceneMount { height: min(75vw, 24rem); min-height: 20rem; }
+  .footer-note { flex-direction: column; gap: 0.35rem; }
+}
+
+@media (max-width: 380px) {
+  .dashboard-main { padding-inline: 0.55rem; }
+  .panel { padding: 0.85rem; }
+  .scene-help { display: none; }
+  #sceneMount { height: 20rem; min-height: 20rem; }
+}
+
+/* Kept after the mobile rules so the scene remains a single full-width panel. */
+@media (max-width: 1100px) and (min-width: 901px) {
+  .dashboard-grid { grid-template-columns: minmax(250px, 0.8fr) minmax(290px, 1fr); }
+  .scene-panel { grid-column: 1 / -1; grid-row: auto; }
 }

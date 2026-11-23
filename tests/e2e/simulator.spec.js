@@ -83,3 +83,35 @@ test('closed clearance applies the red thermal rail cue', async ({ page }) => {
   expect(color.r).toBeGreaterThan(color.b);
   expect(color.r).toBeGreaterThan(color.g);
 });
+
+test('mobile layout stacks panels without horizontal overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openSimulator(page);
+
+  const layout = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+    sidebarWidth: document.querySelector('.sidebar').getBoundingClientRect().width,
+    sceneWidth: document.querySelector('#sceneMount').getBoundingClientRect().width,
+    canvasHeight: document.querySelector('#sceneMount canvas').getBoundingClientRect().height,
+  }));
+
+  expect(layout.scrollWidth).toBeLessThanOrEqual(layout.viewport + 1);
+  expect(layout.sidebarWidth).toBe(layout.viewport);
+  expect(layout.sceneWidth).toBeLessThanOrEqual(layout.viewport - 20);
+  expect(layout.canvasHeight).toBeGreaterThanOrEqual(300);
+});
+
+test('mobile layout places the 3D simulator before controls and results', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openSimulator(page);
+
+  const order = await page.evaluate(() => [
+    document.querySelector('.scene-panel'),
+    document.querySelector('.controls-panel'),
+    document.querySelector('.results-panel'),
+  ].map(panel => panel.getBoundingClientRect().top));
+
+  expect(order[0]).toBeLessThan(order[1]);
+  expect(order[1]).toBeLessThan(order[2]);
+});
