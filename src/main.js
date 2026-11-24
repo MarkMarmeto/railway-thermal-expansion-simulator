@@ -38,6 +38,7 @@
   }
 
   function formatRailResults(state) {
+    const excess = Math.max(0, -state.signedGapMm);
     return {
       summary: [
         `Temperature: ${state.temperatureC} °C`,
@@ -48,10 +49,16 @@
         `Expansion: ${state.expansionMm} mm`,
         `Signed gap: ${state.signedGapMm} mm`,
         `Physical gap: ${state.remainingGapMm} mm`,
+        `Expansion beyond available clearance: ${excess} mm`,
         `Status: ${state.status === 'Closed/Insufficient clearance' ? 'Closed / Insufficient clearance' : state.status}`,
       ].join('\n'),
       explanation: 'The model uses ΔL = α × L₀ × (T − T₀). α is the material coefficient of expansion per °C; L₀ is the original rail length; T is the selected temperature; T₀ is the reference temperature; ΔL is the signed expansion; and g₀ is the initial gap. Here L₀ = 10 m and T₀ = 25 °C. The signed gap is g₀ − ΔL; the physical gap cannot be less than 0 mm.',
-      limitations: 'This model reports clearance only. Buckling, compression force, and real-world failure are not calculated.',
+      limitations: 'This model calculates expansion and clearance only. Sideways bending and compression arrows are illustrative. Buckling onset, deflection, compression force, and real-world failure are not calculated.',
+      contact: state.remainingGapMm > 0
+        ? `Gap open: ${state.remainingGapMm} mm. Rail ends have not met.`
+        : excess === 0
+          ? 'Contact reached: 0 mm gap. No expansion beyond available clearance.'
+          : `Expansion beyond available clearance: ${excess} mm. Inward arrows and sideways bending illustrate restrained expansion; they do not predict buckling or force.`,
     };
   }
 
@@ -60,6 +67,7 @@
     nodes.summary.textContent = formatted.summary;
     nodes.explanation.textContent = formatted.explanation;
     nodes.limitations.textContent = formatted.limitations;
+    if (nodes.contact) nodes.contact.textContent = formatted.contact;
     if (nodes.temperatureOutput) nodes.temperatureOutput.textContent = `${state.temperatureC} °C`;
     if (nodes.gapOutput) nodes.gapOutput.textContent = `${state.initialGapMm} mm`;
     if (nodes.statusBadge) {
@@ -101,6 +109,7 @@
       summary: document.getElementById('resultsSummary'),
       explanation: document.getElementById('resultsExplanation'),
       limitations: document.getElementById('resultsLimitations'),
+      contact: document.getElementById('contactState'),
       materialCue: document.getElementById('materialCue'),
       temperatureOutput: document.querySelector('output[for="temperatureC"]'),
       gapOutput: document.querySelector('output[for="initialGapMm"]'),

@@ -90,11 +90,19 @@ control input
     -> shared rail state
        -> results panel
        -> status explanation
-       -> 3D rail positions and gap indicator
+       -> 3D rail positions (gap measurements remain in the results panel)
        -> temperature color
 ```
 
 `scene.js` must not recalculate physics independently. `main.js` owns the orchestration and passes the same calculated state to UI and scene rendering functions.
+
+### Outdoor scene presentation (CR-01M86PR6)
+
+The overhead gap bar is removed. The numeric physical gap and signed clearance remain the measurement source. The scene creates four deterministic 128×128 neutral DataTextures at startup for brushed metal, wood grain, gravel ballast, and grass. Texture maps are reused across meshes and material changes; no network assets or extra dependencies are needed. Primitive terrain and distant hills, sky-colored background and fog, hemisphere lighting, and one 1024×1024 directional shadow map provide outdoor context. Steel, aluminum, and copper retain their colors with distinct roughness/metalness settings; the existing red closure tint takes precedence. No compression or buckling physics is added.
+
+### Contact and restrained expansion illustration (CR-01M86Q57)
+
+The rail-end separation is exactly `remainingGapMm * 0.1` scene units after the movement settles. Do not subtract expansion again or add a spacer width. The joint marker sits below the rail contact path. Rail heads, webs, and feet use 24 longitudinal segments, with immutable rest positions for reversible lateral deformation. Matching cosine offsets at the two end faces preserve contact without x-axis overlap; deformation changes z only. Arrows and bending begin only after the ends meet and signed clearance is negative. The visual amplitude is capped at 1.2 scene units and scales by 0.12 per mm of excess clearance purely for display; it is not a buckling threshold, constitutive law, or computed deflection. Exactly zero clearance has contact but no bend. Positive clearance restores straight geometry and hides arrows. The scene caption distinguishes open, contact, and illustrative restrained expansion; physical calculations and material coefficients remain unchanged.
 
 ---
 
@@ -410,7 +418,7 @@ No numeric latency or throughput SLA is required for this low-stakes local exhib
 - Keep `calculateRailState()` pure and test it before implementing the 3D scene.
 - Use fixed `L₀ = 10 m`, `T₀ = 25°C`, and the three approved approximate coefficients.
 - Drive UI and scene from one calculated state.
-- Keep closed-gap behavior physically honest: display zero physical gap and explain insufficient clearance without simulating overlap or buckling.
+- Keep closed-gap behavior physically honest: display zero physical gap without overlap. Schematic bending is permitted under CR-01M86Q57 only with the visible explanation that buckling, force, and deflection are not predicted.
 - Make controls keyboard-operable and results understandable without color alone.
 - Document local run commands, formulas, assumptions, exaggerated scale, and AI use.
 

@@ -66,6 +66,10 @@ This exhibit reports thermal expansion and joint clearance only. It does **not**
 
 The rail movement in the 3D scene is illustrative and visually exaggerated; it is **not drawn to physical scale**. Any heat-flow arrows or particles are illustrative and **non-quantitative**. Numerical readings come from the fixed model above, not from measuring the rendered scene.
 
+The rail ends now meet at zero physical gap. Once free expansion exceeds available clearance, inward arrows and an exaggerated sideways bend demonstrate restrained expansion. This is a reversible classroom illustration: the bend amplitude and onset are not a physical buckling prediction, and the arrows do not measure force. Cooling straightens the drawing; it does not model recovery of a damaged real rail. The scene reports the excess expansion separately in millimetres while keeping the physical gap at zero.
+
+Try Aluminum, 75°C, and a 5 mm initial gap: the readout shows 6.5 mm of expansion beyond clearance and the rails bend sideways. Return to 25°C to reopen the 5 mm gap. For first contact without bending, use Steel, 75°C, and 6 mm.
+
 ## Assignment declaration
 
 This project was developed and documented with assistance from OpenAI Codex/AI. The human-directed scope, approved assumptions, review decisions, and final verification remain the responsibility of the project author.

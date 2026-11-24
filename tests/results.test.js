@@ -87,3 +87,14 @@ test('renders a readable scene failure without replacing the result shell', () =
   assert.equal(node.className, 'scene-status error');
   assert.equal(node.dataset.state, 'error');
 });
+
+test('distinguishes open clearance, first contact, and illustrative restrained expansion', () => {
+  const result = (temperatureC, initialGapMm) => formatRailResults(calculateRailState({ material: 'steel', temperatureC, initialGapMm }));
+  assert.match(result(69, 5.5).contact, /Gap open: 0.22 mm/);
+  assert.match(result(75, 6).contact, /Contact reached: 0 mm/);
+  assert.match(result(75, 6).summary, /Expansion beyond available clearance: 0 mm/);
+  const restrained = result(100, 1);
+  assert.match(restrained.contact, /Expansion beyond available clearance: 8 mm/);
+  assert.match(restrained.contact, /do not predict buckling or force/);
+  assert.match(restrained.limitations, /deflection.*not calculated/);
+});

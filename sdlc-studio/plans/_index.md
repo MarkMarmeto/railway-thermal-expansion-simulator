@@ -1,15 +1,15 @@
 # Implementation Plans Registry
 
-**Last Updated:** 2026-11-02
+**Last Updated:** 2026-11-24
 
 ## Summary
 
 | Status | Count |
 | --- | --- |
-| Draft | 4 |
+| Draft | 6 |
 | In Progress | 0 |
 | Complete | 5 |
-| **Total** | **9** |
+| **Total** | **11** |
 
 ## Plans
 
@@ -24,6 +24,8 @@
 | [PL-01M6DBZH](PL-01M6DBZH-verify-critical-simulator-journeys-in-a-browser.md) | -- | -- | Complete | 2026-11-02 |
 | [PL-01M6DCVA](PL-01M6DCVA-verify-accessibility-and-renderer-failure-behavior.md) | -- | -- | Complete | 2026-11-02 |
 | [PL-01M6DC95](PL-01M6DC95-document-local-operation-and-scientific-assumptions-implementation-plan.md) | -- | -- | Complete | 2026-11-02 |
+| [PL-01M86PFC](PL-01M86PFC-textured-railway-environment-implementation.md) | -- | -- | Draft | 2026-11-24 |
+| [PL-01M86QQJ](PL-01M86QQJ-exact-contact-and-restrained-expansion-presentation.md) | -- | -- | Draft | 2026-11-24 |
 
 ## Notes
 

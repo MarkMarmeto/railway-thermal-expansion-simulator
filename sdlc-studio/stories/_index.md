@@ -11,9 +11,9 @@
 | Ready | 0 |
 | Planned | 0 |
 | In Progress | 0 |
-| Review | 0 |
+| Review | 2 |
 | Done | 9 |
-| **Total** | **9** |
+| **Total** | **11** |
 
 ## Stories by Epic
 
@@ -33,6 +33,8 @@
 | [US-01M6DAAX](US-01M6DAAX-verify-critical-simulator-journeys-in-a-browser.md) | Verify critical simulator journeys in a browser | EP-01M6DA3Y | Done | 5 | Elena Reyes |
 | [US-01M6DA94](US-01M6DA94-verify-accessibility-and-renderer-failure-behavior.md) | Verify accessibility and renderer failure behavior | EP-01M6DA3Y | Done | 3 | Maya Santos |
 | [US-01M6DA5X](US-01M6DA5X-document-local-operation-and-scientific-assumptions.md) | Document local operation and scientific assumptions | EP-01M6DA3Y | Done | 3 | Elena Reyes |
+| [US-01M86P7H](US-01M86P7H-render-an-uncluttered-textured-railway-environment.md) | Render an uncluttered textured railway environment | EP-01M6DA39 | Review | 3 | -- |
+| [US-01M86Q8Q](US-01M86Q8Q-show-exact-contact-and-illustrative-restrained-expansion.md) | Show exact contact and illustrative restrained expansion | EP-01M6DA39 | Review | 5 | -- |
 
 ## Notes
 

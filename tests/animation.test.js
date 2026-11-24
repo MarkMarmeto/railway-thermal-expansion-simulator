@@ -10,40 +10,11 @@ const {
   MATERIAL_CUES,
 } = require('../src/scene');
 
-class Object3D {
-  constructor() {
-    this.children = [];
-    this.position = { x: 0, y: 0, z: 0, set: (x, y, z) => { this.position.x = x; this.position.y = y; this.position.z = z; } };
-    this.scale = { x: 1, y: 1, z: 1, set: (x, y, z) => { this.scale.x = x; this.scale.y = y; this.scale.z = z; } };
-  }
-
-  add(...objects) { this.children.push(...objects); }
-}
-
-class Group extends Object3D {}
-class Scene extends Group {}
-class Camera extends Object3D {}
-class Light extends Object3D {}
-class Geometry {}
-class Material {
-  constructor(options = {}) {
-    this.color = options.color;
-    this.name = options.name;
-  }
-}
-class Mesh extends Object3D {
-  constructor(geometry, material) {
-    super();
-    this.geometry = geometry;
-    this.material = material;
-  }
-}
 class Renderer { constructor() { this.domElement = { tagName: 'CANVAS' }; } setSize() {} }
 
 const fakeThree = {
-  Scene, Group, PerspectiveCamera: Camera, DirectionalLight: Light, AmbientLight: Light,
-  BoxGeometry: Geometry, MeshStandardMaterial: Material, MeshBasicMaterial: Material,
-  Mesh, WebGLRenderer: Renderer,
+  ...require('three'),
+  WebGLRenderer: Renderer,
 };
 
 function scene() {
@@ -93,12 +64,12 @@ test('keeps material identity separate from heat color', () => {
 test('changes the rail appearance for each supported material', () => {
   const railwayScene = scene();
   applyRailState(railwayScene, { temperatureC: 55, material: 'steel', materialName: 'Steel', remainingGapMm: 2, signedGapMm: 2 });
-  const steelColor = railwayScene.materials.rail.color;
+  const steelColor = railwayScene.materials.rail.color.getHex();
 
   applyRailState(railwayScene, { temperatureC: 55, material: 'aluminum', materialName: 'Aluminum', remainingGapMm: 2, signedGapMm: 2 });
-  const aluminumColor = railwayScene.materials.rail.color;
+  const aluminumColor = railwayScene.materials.rail.color.getHex();
   applyRailState(railwayScene, { temperatureC: 55, material: 'copper', materialName: 'Copper', remainingGapMm: 2, signedGapMm: 2 });
-  const copperColor = railwayScene.materials.rail.color;
+  const copperColor = railwayScene.materials.rail.color.getHex();
 
   assert.notEqual(steelColor, aluminumColor);
   assert.notEqual(aluminumColor, copperColor);
@@ -118,15 +89,57 @@ test('restores a strong red rail tint when the physical gap closes', () => {
   assert.ok(closedColor.b < openColor.b);
 });
 
-test('clamps closed clearance to the joint boundary without rail overlap', () => {
+test('closed rail ends meet exactly without a spacer or overlap', () => {
   const targets = calculateVisualRailTargets({ remainingGapMm: 0, signedGapMm: -4 });
   assert.equal(targets.visualGap, 0);
-  assert.equal(targets.right - targets.left, 4.15);
+  assert.equal(targets.right - targets.left, 4);
 
   const railwayScene = scene();
   applyRailState(railwayScene, { temperatureC: 100, material: 'steel', remainingGapMm: 0, signedGapMm: -4 });
   animateRailwayScene(railwayScene, 1);
   const railHalfLength = 2;
-  assert.ok(railwayScene.objects.railLeft.position.x + railHalfLength <= -0.075);
-  assert.ok(railwayScene.objects.railRight.position.x - railHalfLength >= 0.075);
+  assert.equal(railwayScene.objects.railLeft.position.x + railHalfLength, 0);
+  assert.equal(railwayScene.objects.railRight.position.x - railHalfLength, 0);
+});
+
+test('preserves small positive gaps instead of subtracting expansion twice', () => {
+  const { calculateRailState } = require('../src/physics');
+  const state = calculateRailState({ material: 'steel', temperatureC: 69, initialGapMm: 5.5 });
+  const targets = calculateVisualRailTargets(state);
+  assert.equal(targets.visualGap, 0.22);
+  assert.ok(Math.abs((targets.right - 2) - (targets.left + 2) - 0.022) < 1e-12);
+});
+
+test('contact has no bending; excess expansion bends matching rail ends and cooling restores them', () => {
+  const railwayScene = scene();
+  const { railLeft, railRight, compressionArrows } = railwayScene.objects;
+  const original = Array.from(railLeft.geometry.attributes.position.array);
+  const update = signedGapMm => {
+    applyRailState(railwayScene, { material: 'steel', temperatureC: 75, signedGapMm, remainingGapMm: Math.max(0, signedGapMm) });
+    animateRailwayScene(railwayScene, 1);
+  };
+  update(0);
+  assert.equal(railwayScene.animation.bend, 0);
+  assert.equal(compressionArrows.visible, false);
+  update(-2);
+  const mildBend = railwayScene.animation.bend;
+  assert.ok(mildBend > 0);
+  assert.equal(compressionArrows.visible, true);
+  update(-10);
+  assert.ok(railwayScene.animation.bend > mildBend);
+  const endpoint = (rail, x) => {
+    const points = rail.geometry.attributes.position;
+    const zs = [];
+    for (let i = 0; i < points.count; i += 1) {
+      if (points.getX(i) === x) zs.push(points.getZ(i));
+    }
+    return [...new Set(zs)].sort();
+  };
+  assert.deepEqual(endpoint(railLeft, 2), endpoint(railRight, -2));
+  assert.deepEqual(endpoint(railLeft, -2), [-0.125, 0.125]);
+  update(4);
+  assert.equal(railwayScene.animation.bend, 0);
+  assert.equal(compressionArrows.visible, false);
+  assert.deepEqual(Array.from(railLeft.geometry.attributes.position.array), original);
+  assert.ok(railLeft.position.x + 2 < railRight.position.x - 2);
 });

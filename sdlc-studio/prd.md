@@ -76,7 +76,7 @@ The simulator supports the approved school proposal and performance task. The pr
 | Material control | Dropdown for Steel, Aluminum, or Copper with explicit coefficient | Not Started | Must | Single-screen UI |
 | Physics calculation | Linear thermal expansion and signed-clearance calculation using fixed assumptions | Not Started | Must | `src/physics.js` |
 | Live results | Temperature, material, coefficient, assumptions, expansion, gap, status, formula, and explanation | Not Started | Must | Results panel |
-| 3D railway scene | Two rail ends, joint, sleepers, gap indicator, lighting, movement, and camera controls | Not Started | Must | `src/scene.js` |
+| 3D railway scene | Two rail ends, joint, textured sleepers and rails, outdoor environment, numerical gap reporting, lighting, movement, and camera controls (CR-01M86PR6) | Not Started | Must | `src/scene.js` |
 | Thermal visualization | Cool-blue to warm-red response to temperature | Not Started | Must | 3D scene |
 | Teaching explanation | Plain-language definitions and interpretation of the displayed result | Not Started | Must | Results/help panel |
 | Graceful startup failure | Readable error if 3D initialization fails rather than a blank page | Not Started | Must | Application shell |
@@ -153,8 +153,11 @@ The simulator supports the approved school proposal and performance task. The pr
 
 **Acceptance Criteria:**
 
-- [ ] The scene includes two adjacent rail ends, a visible joint, sleepers, gap indication, and basic lighting.
+- [ ] The scene includes two adjacent rail ends, a visible joint, sleepers, and basic lighting. Gap measurements remain in the numerical results; no floating overhead gap bar is rendered (CR-01M86PR6).
+- [ ] A lightweight outdoor environment provides sky, ground, ballast, and locally generated metal and wood textures. Material colors and red closure warnings remain visible, including offline (CR-01M86PR6).
 - [ ] Temperature or material changes produce smooth visible rail movement.
+- [ ] Rail geometry uses a fixed scale of the physical gap, preserves positive clearance, and meets exactly at zero without a spacer or overlap (CR-01M86Q57).
+- [ ] After contact, further free expansion beyond available clearance drives inward arrows and bounded schematic lateral bending. The scene reports excess clearance in mm and explicitly states that bending, buckling onset, and force are not predictions. Cooling restores straight rails and open clearance (CR-01M86Q57).
 - [ ] The user can orbit and zoom the camera.
 - [ ] Small physical expansions use a clearly labelled exaggerated visual scale.
 - [ ] Optional heat-flow arrows or particles are illustrative only and are not presented as quantitative fluid physics.

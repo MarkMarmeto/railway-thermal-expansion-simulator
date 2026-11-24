@@ -8,6 +8,10 @@
 
 ## Summary
 
+Presentation amendment (2026-11-24, CR-01M86PR6): the overhead gap indicator below is superseded by numerical gap reporting. US-01M86P7H adds a lightweight offline environment and textured surfaces; the original scene criteria otherwise remain in effect.
+
+Contact amendment (2026-11-24, CR-01M86Q57): US-01M86Q8Q makes rail ends meet exactly at zero clearance and adds clearly labeled schematic compression arrows and lateral bending after contact. Physical buckling/force prediction remains excluded. The historical no-buckling presentation restriction below is superseded only for this illustrative effect.
+
 Build the lightweight Three.js railway joint scene and connect it to the shared calculated state so rail movement, heat coloring, gap indication, orbit, and zoom visibly explain the calculation.
 
 ## Inherited Constraints
@@ -117,7 +121,7 @@ Creates `src/scene.js` with a small public surface for initialization, state upd
 
 **Size:** M  
 **Estimated Story Count:** 3  
-**Derived Point Total:** 13
+**Derived Point Total:** 21
 
 **Complexity Factors:**
 
@@ -130,6 +134,8 @@ Stories will be generated after epic review and will cover scene construction, s
 - [x] [US-01M6DACM: Build the basic Three.js railway joint scene](../stories/US-01M6DACM-build-the-basic-three-js-railway-joint-scene.md)
 - [x] [US-01M6DA9T: Animate rail movement and temperature visualization](../stories/US-01M6DA9T-animate-rail-movement-and-temperature-visualization.md)
 - [x] [US-01M6DA6G: Add camera interaction and visual-scale communication](../stories/US-01M6DA6G-add-camera-interaction-and-visual-scale-communication.md)
+- [ ] [US-01M86P7H: Render an uncluttered textured railway environment](../stories/US-01M86P7H-render-an-uncluttered-textured-railway-environment.md)
+- [ ] [US-01M86Q8Q: Show exact contact and illustrative restrained expansion](../stories/US-01M86Q8Q-show-exact-contact-and-illustrative-restrained-expansion.md)
 
 ## Test Plan
 
